@@ -7,7 +7,7 @@ use std::path::Path;
 use std::process::Command;
 use whisper_rs::{FullParams, SamplingStrategy, WhisperContext, WhisperContextParameters};
 
-use video_subtitle::{ensure_model_exists_sync, AppConfig};
+use video_subtitle::{check_model_sync, AppConfig};
 
 #[derive(Parser, Debug)]
 #[command(author, version, about = "从视频中提取字幕")]
@@ -121,7 +121,7 @@ fn generate_subtitles(app_config: &AppConfig) -> Result<()> {
 
     // 确保模型存在，如果不存在则下载
     println!("检查模型: {}...", app_config.model);
-    let model_path = ensure_model_exists_sync(&app_config.model)?;
+    let model_path = check_model_sync(&app_config.model)?;
     println!("使用模型: {:?}", model_path);
 
     let output_path = Path::new(&app_config.output);

@@ -24,7 +24,7 @@ pub fn get_models_dir() -> Result<PathBuf> {
 }
 
 /// 检查模型文件是否存在，如果不存在则下载
-pub async fn ensure_model_exists(model_name: &str) -> Result<PathBuf> {
+pub async fn check_model(model_name: &str) -> Result<PathBuf> {
     let models_dir = get_models_dir()?;
     let model_path = models_dir.join(model_name);
     
@@ -84,7 +84,7 @@ pub fn get_model_path(model_name: &str) -> Result<PathBuf> {
 }
 
 /// 同步版本的确保模型存在
-pub fn ensure_model_exists_sync(model_name: &str) -> Result<PathBuf> {
+pub fn check_model_sync(model_name: &str) -> Result<PathBuf> {
     let rt = tokio::runtime::Runtime::new().context("无法创建Tokio运行时")?;
-    rt.block_on(ensure_model_exists(model_name))
+    rt.block_on(check_model(model_name))
 }

@@ -1,5 +1,6 @@
+pub mod cli;
 pub mod config;
-pub mod model;
+pub mod media;
+pub mod whisper;
 
 pub use config::AppConfig;
-pub use model::check_model_sync;

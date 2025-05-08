@@ -10,7 +10,7 @@ const MODEL_BASE_URL: &str = "https://huggingface.co/ggerganov/whisper.cpp/resol
 
 /// 获取模型目录路径
 pub fn get_models_dir() -> Result<PathBuf> {
-    let proj_dirs = ProjectDirs::from("", "", "video-subtitle")
+    let proj_dirs = ProjectDirs::from("", "", "subtitle-generator")
         .context("无法确定用户配置目录")?;
     
     let config_dir = proj_dirs.config_dir();

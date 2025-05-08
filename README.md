@@ -1,4 +1,4 @@
-# 视频字幕提取工具
+# 字幕生成器器
 
 这是一个使用Rust编写的命令行工具，可以从视频文件中提取音频并生成SRT格式的字幕文件。该工具使用Whisper语音识别模型进行音频转写。
 
@@ -11,8 +11,8 @@
 
 ```bash
 # 克隆此仓库
-git clone https://github.com/yourusername/video-subtitle.git
-cd video-subtitle
+git clone https://github.com/yourusername/subtitle-generator.git
+cd subtitle-generator
 
 # 编译项目
 cargo build --release
@@ -22,19 +22,19 @@ cargo build --release
 
 ```bash
 # 基本用法
-video-subtitle input_video.mp4 output_subtitles.srt
+subtitle-generator input_video.mp4 output_subtitles.srt
 
 # 指定语言
-video-subtitle -l zh input_video.mp4 output_subtitles.srt
+subtitle-generator -l zh input_video.mp4 output_subtitles.srt
 ```
 
 ## 配置文件
 
 程序使用位于系统用户配置目录的配置文件：
 
-- Windows: `%APPDATA%\video-subtitle\config.toml`
-- macOS: `~/Library/Application Support/video-subtitle/config.toml`
-- Linux: `~/.config/video-subtitle/config.toml`
+- Windows: `%APPDATA%\subtitle-generator\config.toml`
+- macOS: `~/Library/Application Support/subtitle-generator/config.toml`
+- Linux: `~/.config/subtitle-generator/config.toml`
 
 配置文件使用TOML格式：
 
@@ -56,9 +56,9 @@ language = "auto"
 程序使用 Whisper 模型进行语音识别。默认使用 `ggml-medium-q8_0.bin` 模型。
 
 **模型存储位置**：
-- Windows: `%APPDATA%\video-subtitle\models\`
-- macOS: `~/Library/Application\ Support/video-subtitle/models/`
-- Linux: `~/.config/video-subtitle/models/`
+- Windows: `%APPDATA%\subtitle-generator\models\`
+- macOS: `~/Library/Application\ Support/subtitle-generator/models/`
+- Linux: `~/.config/subtitle-generator/models/`
 
 **自动下载功能**：
 - 首次运行时，如果模型不存在，程序会自动从Hugging Face下载所需的模型

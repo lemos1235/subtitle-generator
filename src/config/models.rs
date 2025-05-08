@@ -45,7 +45,7 @@ impl Default for ConfigFile {
 
 /// 获取配置文件路径
 pub fn get_config_path() -> Result<PathBuf> {
-    let proj_dirs = ProjectDirs::from("", "", "video-subtitle")
+    let proj_dirs = ProjectDirs::from("", "", "subtitle-generator")
         .context("无法确定用户配置目录")?;
     
     let config_dir = proj_dirs.config_dir();
@@ -58,7 +58,7 @@ pub fn get_config_path() -> Result<PathBuf> {
 
 /// 创建默认配置文件
 fn create_default_config_file(path: &PathBuf) -> Result<()> {
-    let default_config = format!(r#"# 视频字幕提取工具配置文件 - 自动生成
+    let default_config = format!(r#"# 字幕生成器器配置文件 - 自动生成
 
 [base]
 # Whisper模型名称

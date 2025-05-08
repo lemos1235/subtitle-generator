@@ -1,8 +1,8 @@
 use anyhow::Result;
 use clap::Parser;
 
-use video_subtitle::cli::{Args, args::create_app_config};
-use video_subtitle::whisper::transcribe_audio;
+use subtitle_generator::cli::{Args, args::create_app_config};
+use subtitle_generator::whisper::transcribe_audio;
 
 fn main() -> Result<()> {
     // 解析命令行参数

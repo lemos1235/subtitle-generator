@@ -1,5 +1,5 @@
 [package]
-name = "video-subtitle"
+name = "subtitle-generator"
 version = "0.1.0"
 edition = "2021"
 
@@ -20,11 +20,12 @@ eframe = "0.26.0"
 egui_extras = { version = "0.26.0", features = ["image"] }
 rfd = "0.14.0"
 env_logger = "0.10.1"
+image = "0.24.9"
 
 [[bin]]
-name = "video-subtitle-cli"
+name = "subtitle-generator-cli"
 path = "src/main_cli.rs"
 
 [[bin]]
-name = "video-subtitle-gui"
+name = "subtitle-generator-gui"
 path = "src/main.rs"

@@ -17,15 +17,21 @@ indicatif = "0.17.8"
 futures-util = "0.3.30"
 egui = "0.26.0"
 eframe = "0.26.0"
-egui_extras = { version = "0.26.0", features = ["image"] }
 rfd = "0.14.0"
 env_logger = "0.10.1"
 image = "0.24.9"
 
-[[bin]]
-name = "subtitle-generator-cli"
-path = "src/main_cli.rs"
+#[[bin]]
+#name = "subtitle-generator-cli"
+#path = "src/main_cli.rs"
 
 [[bin]]
 name = "subtitle-generator-gui"
 path = "src/main.rs"
+
+[package.metadata.bundle]
+name = "Subtitle Generator"
+identifier = "club.lemos.subtitle-generator"
+icon = ["assets/appicon.icns"]
+version = "1.0.0"
+resources = ["assets"]

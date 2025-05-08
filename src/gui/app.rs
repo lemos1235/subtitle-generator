@@ -7,6 +7,7 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 
 use crate::config::{load_config, AppConfig};
+use crate::utils::get_resource_path;
 use crate::whisper::transcribe_audio;
 
 /// 应用状态
@@ -411,7 +412,10 @@ fn setup_custom_styles(ctx: &egui::Context) {
     // 配置字体
     let mut fonts = egui::FontDefinitions::default();
 
-    if let Ok(font_data) = std::fs::read("assets/fonts/NotoSansSC-Regular.ttf") {
+    // 尝试加载字体，首先检查开发环境路径，然后检查打包后的路径
+    let font_path = get_resource_path("assets/NotoSansSC-Regular.ttf");
+
+    if let Ok(font_data) = std::fs::read(&font_path) {
         fonts.font_data.insert(
             "chinese_font".to_owned(),
             egui::FontData::from_owned(font_data),
@@ -420,6 +424,8 @@ fn setup_custom_styles(ctx: &egui::Context) {
         for (_family_name, family) in fonts.families.iter_mut() {
             family.insert(0, "chinese_font".to_owned());
         }
+    } else {
+        eprintln!("无法加载字体文件: {}", font_path);
     }
 
     // 应用字体设置

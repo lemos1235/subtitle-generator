@@ -1,50 +1,41 @@
-use eframe::{NativeOptions, Theme};
-use egui::{IconData, ViewportBuilder};
-use subtitle_generator::gui::VideoSubtitleApp;
-use subtitle_generator::utils::get_resource_path;
+use anyhow::{Context, Result};
+use clap::Parser;
+use subtitle_generator::whisper::transcribe_audio;
+use subtitle_generator::{config, AppConfig};
 
-fn main() -> eframe::Result<()> {
-    // 环境日志初始化
-    env_logger::init();
+#[derive(Parser, Debug)]
+#[command(author, version, about = "从视频中提取字幕")]
+pub struct Args {
+    /// 识别语言 (例如: zh, ja, auto)
+    #[arg(short, long)]
+    pub language: Option<String>,
 
-    // 加载应用图标
-    let icon_path = get_resource_path("assets/appicon.png");
-    let logo = match image::open(&icon_path) {
-        Ok(img) => img,
-        Err(e) => {
-            eprintln!("无法加载应用图标: {}: {}", icon_path, e);
-            // 如果无法加载图标，继续运行程序但不设置图标
-            image::DynamicImage::new_rgba8(32, 32)
-        }
+    /// 输入视频文件路径
+    pub input: Option<String>,
+
+    /// 输出字幕文件路径
+    pub output: Option<String>,
+}
+
+fn main() -> Result<()> {
+    // 解析命令行参数
+    let args = Args::parse();
+
+    // 创建应用配置
+    let input = args.input.context("缺少输入视频文件路径")?;
+    let output = args.output.context("缺少输出字幕文件路径")?;
+
+    // 加载配置文件
+    let config = config::load_config()?;
+
+    // 创建应用配置
+    let app_config = AppConfig {
+        input,
+        output,
+        model: config.base.model,
+        language: args.language.unwrap_or(config.base.language),
     };
 
-    // 提前获取logo的尺寸
-    let width = logo.width();
-    let height = logo.height();
-    let rgba = logo.into_rgba8().into_raw();
-
-    // 应用选项
-    let options = NativeOptions {
-        viewport: ViewportBuilder::default()
-            .with_inner_size([350.0, 224.0])
-            .with_min_inner_size([350.0, 224.0])
-            .with_title("字幕生成器器")
-            .with_icon(IconData {
-                rgba,
-                width,
-                height,
-            })
-            .with_decorations(true)
-            .with_transparent(false),
-        default_theme: Theme::Light,
-        follow_system_theme: false,
-        ..Default::default()
-    };
-
-    // 运行应用
-    eframe::run_native(
-        "字幕生成器器",
-        options,
-        Box::new(|cc| Box::new(VideoSubtitleApp::new(cc))),
-    )
+    // 调用核心功能
+    transcribe_audio(&app_config)
 }

@@ -2,13 +2,10 @@ use anyhow::{Context, Result};
 use hound::{SampleFormat, WavReader};
 use std::path::Path;
 use std::process::Command;
-use crate::utils::get_ffmpeg_path;
 
 /// 从视频中提取音频
 pub fn extract_audio_from_video(video_path: &Path, audio_path: &Path) -> Result<()> {
-    let ffmpeg_path = get_ffmpeg_path();
-    
-    let output = Command::new(ffmpeg_path)
+    let output = Command::new("ffmpeg")
         .args([
             "-i",
             video_path.to_str().unwrap(),

@@ -2,24 +2,23 @@ use anyhow::{Context, Result};
 use std::path::Path;
 use whisper_rs::{FullParams, SamplingStrategy, WhisperContext, WhisperContextParameters};
 
-use crate::config::AppConfig;
 use crate::media::{extract_audio_from_video, generate_srt_file, parse_wav_file};
 use std::env;
 use std::fs;
 
 /// 核心功能：从视频生成字幕
-pub fn transcribe_audio(app_config: &AppConfig) -> Result<()> {
-    let video_path = Path::new(&app_config.input);
+pub fn transcribe_audio(input: &str, output: &str, model: &str, language: &str) -> Result<()> {
+    let video_path = Path::new(input);
     if !video_path.exists() {
-        anyhow::bail!("视频文件不存在: {}", app_config.input);
+        anyhow::bail!("视频文件不存在: {}", input);
     }
 
     // 确保模型存在，如果不存在则下载
-    println!("检查模型: {}...", app_config.model);
-    let model_path = crate::whisper::check_model_sync(&app_config.model)?;
+    println!("检查模型: {}...", model);
+    let model_path = super::model::check_model_sync(model)?;
     println!("使用模型: {:?}", model_path);
 
-    let output_path = Path::new(&app_config.output);
+    let output_path = Path::new(output);
 
     // 在系统临时目录创建临时WAV文件
     let temp_dir = env::temp_dir();
@@ -46,8 +45,8 @@ pub fn transcribe_audio(app_config: &AppConfig) -> Result<()> {
     let mut state = ctx.create_state().context("无法创建状态")?;
 
     let mut params = FullParams::new(SamplingStrategy::default());
-    if app_config.language != "auto" {
-        params.set_language(Some(&app_config.language));
+    if language != "auto" {
+        params.set_language(Some(language));
     }
     params.set_progress_callback_safe(|progress| println!("处理进度: {}%", progress));
 
@@ -66,7 +65,7 @@ pub fn transcribe_audio(app_config: &AppConfig) -> Result<()> {
         fs::remove_file(&temp_audio_path).context("无法删除临时音频文件")?;
     }
 
-    println!("字幕生成完成: {}", app_config.output);
+    println!("字幕生成完成: {}", output);
 
     Ok(())
 }

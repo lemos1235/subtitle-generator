@@ -77,12 +77,6 @@ async fn download_model(model_name: &str, model_path: &Path) -> Result<()> {
     Ok(())
 }
 
-/// 获取模型的完整路径
-pub fn get_model_path(model_name: &str) -> Result<PathBuf> {
-    let models_dir = get_models_dir()?;
-    Ok(models_dir.join(model_name))
-}
-
 /// 同步版本的确保模型存在
 pub fn check_model_sync(model_name: &str) -> Result<PathBuf> {
     let rt = tokio::runtime::Runtime::new().context("无法创建Tokio运行时")?;
